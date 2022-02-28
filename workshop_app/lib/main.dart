@@ -50,8 +50,10 @@ class _MyHomePageState extends State<MyHomePage> {
         future: fetchShow('scrubs'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(
-              snapshot.data!,
+            return SingleChildScrollView(
+              child: Text(
+                snapshot.data!,
+              ),
             );
           }
           return const CircularProgressIndicator();
