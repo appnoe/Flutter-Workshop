@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+
+import 'api/api.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +33,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static String hash = "";
+
+  Future<void> _increment() async {
+    MethodChannel methodChannel = const MethodChannel('com.appnoe.flutter-workshop/cryptokit');
+    final result = await methodChannel.invokeMethod<int>('increment', {'count': 23});
+    print(result);
+  }
+
+  Future<void> _getHash() async {
+    MethodChannel methodChannel = const MethodChannel('com.appnoe.flutter-workshop/cryptokit');
+    final result = await methodChannel.invokeMethod<String>('getHash', {'text': 'foobar'});
+    print(result);
+  }
+
   Future<String> fetchShow(String name) async {
     await Future.delayed(const Duration(seconds: 2));
 
@@ -37,6 +55,17 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await get(uri);
 
     return response.body;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _increment();
+    _getHash();
+    var apiData = Api().fetchShow('simpsons');
+    apiData.then((value) {
+      print(value);
+    });
   }
 
   @override
