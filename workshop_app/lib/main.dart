@@ -49,7 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
     cryptoKit.getHash("foobar");
     var apiData = Api().fetchShow('simpsons');
     apiData.then((value) {
-      print(value);
+      if (kDebugMode) {
+        print(value);
+      }
     });
   }
 
