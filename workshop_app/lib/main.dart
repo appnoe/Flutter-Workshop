@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 
 import 'api/api.dart';
 
@@ -45,16 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
     MethodChannel methodChannel = const MethodChannel('com.appnoe.flutter-workshop/cryptokit');
     final result = await methodChannel.invokeMethod<String>('getHash', {'text': 'foobar'});
     print(result);
-  }
-
-  Future<String> fetchShow(String name) async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    // https://www.tvmaze.com/api
-    final uri = Uri.parse('https://api.tvmaze.com/search/shows?q=$name');
-    final response = await get(uri);
-
-    return response.body;
   }
 
   @override
