@@ -10,6 +10,6 @@ void main() {
     const String clearText = 'foobar';
     final result = hashFactory.generateHash(clearText);
     print(result);
-    expect(clearText, result);
+    expect('8843d7f92416211de9ebb963ff4ce28125932878', result);
   });
 }
