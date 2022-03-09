@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'api/api.dart';
+import 'models/cryptokit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static String hash = "";
+  static CryptoKit cryptoKit = CryptoKit();
 
   Future<void> _increment() async {
     MethodChannel methodChannel = const MethodChannel('com.appnoe.flutter-workshop/cryptokit');
@@ -40,17 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
     print(result);
   }
 
-  Future<void> _getHash() async {
-    MethodChannel methodChannel = const MethodChannel('com.appnoe.flutter-workshop/cryptokit');
-    final result = await methodChannel.invokeMethod<String>('getHash', {'text': 'foobar'});
-    print(result);
-  }
-
   @override
   void initState() {
     super.initState();
     _increment();
-    _getHash();
+    cryptoKit.getHash("foobar");
     var apiData = Api().fetchShow('simpsons');
     apiData.then((value) {
       print(value);
@@ -65,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
           child: FutureBuilder<String>(
-        future: fetchShow('scrubs'),
+        future: cryptoKit.getHash('foobar'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
