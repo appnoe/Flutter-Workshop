@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:test/test.dart';
-import 'package:workshop_app/crypto/cryptokit.dart';
+import 'package:workshop_app/crypto/hash_factory.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  test('Test hashing of string with CryptoKit', () async {
-    final CryptoKit cryptoKit = CryptoKit();
+  test('Test hashing of string ', () async {
+    final HashFactory hashFactory = HashFactory();
     const String clearText = 'foobar';
-    final result = await cryptoKit.getHash('foobar');
+    final result = hashFactory.generateHash(clearText);
     print(result);
     expect(clearText, result);
   });

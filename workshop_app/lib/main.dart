@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'api/api.dart';
-import 'models/cryptokit.dart';
+import 'crypto/cryptokit.dart';
 
 void main() {
   runApp(const MyApp());
