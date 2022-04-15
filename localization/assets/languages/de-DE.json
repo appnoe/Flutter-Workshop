@@ -1,0 +1,5 @@
+{
+    "mainview_title": "Ich bin der Titel",
+    "mainview_subtitle": "Ich bin der Subtitle",
+    "mainview_example_with_params": "Ich bin das Beispiel mit dem Parameter {}"
+}
