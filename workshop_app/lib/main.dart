@@ -35,17 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Row(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Film-Info",
-                style: TextStyle(fontSize: 32),
-              ),
-            ),
+        body: Table(
+          children: [
+            TableRow(children: [Text("Foobar")]),
+            TableRow(children: [Text("Boofar")]),
+            TableRow(children: [Text("Rafoob")])
           ],
-          mainAxisAlignment: MainAxisAlignment.center,
         ));
   }
 }
