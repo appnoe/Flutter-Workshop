@@ -35,6 +35,17 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Center());
+        body: Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                "Film-Info",
+                style: TextStyle(fontSize: 32),
+              ),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ));
   }
 }
