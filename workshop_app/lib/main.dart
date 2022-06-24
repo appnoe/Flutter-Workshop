@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'api/api.dart';
+import 'model/tvmazesearchresult.dart' as Model;
+
 void main() {
   runApp(const MyApp());
 }
@@ -37,10 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _title = getValue();
-    // var apiData = Api().fetchShow('simpsons');
-    // apiData.then((value) {
-    rows = buildTableRows();
-    // });
+    var apiData = Api().fetchShow('simpsons');
+    apiData.then((value) {
+      rows = buildTableRows(value);
+    });
   }
 
   void onTapImage() {
@@ -52,14 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return 'Flutter Devs';
   }
 
-  // List<TableRow> buildTableRows(List<Model.TVMazeSearchResult>? shows) {
-  List<TableRow> buildTableRows() {
+  List<TableRow> buildTableRows(List<Model.TVMazeSearchResult>? shows) {
+    // List<TableRow> buildTableRows() {
     var rows = <TableRow>[];
-    // shows?.forEach((element) {
-    //   print(element.show?.name);
-    // });
-
-    for (var i = 0; i < 3; i++) {
+    shows?.forEach((element) {
       var row = TableRow(children: [
         Column(
           children: [
@@ -68,19 +67,21 @@ class _MyHomePageState extends State<MyHomePage> {
               child: GestureDetector(
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
-                    image: 'https://picsum.photos/250?image=${i}',
+                    image: element.show!.image!.medium!,
                   ),
                   onTap: onTapImage),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
-              child: Text("Image ${i}"),
+              child: Text(element.show!.name!),
             )
           ],
         )
       ]);
       rows.add(row);
-    }
+    });
+
+    for (var i = 0; i < 3; i++) {}
 
     return rows;
   }
