@@ -37,6 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
     rows = buildTableRows();
   }
 
+  void onTapImage() {
+    print("onTapImage");
+  }
+
   List<TableRow> buildTableRows() {
     var rows = <TableRow>[];
 
@@ -46,7 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
-              child: Image.network('https://picsum.photos/250?image=${i}'),
+              child: GestureDetector(
+                  child: Image.network('https://picsum.photos/250?image=${i}'), onTap: onTapImage),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
