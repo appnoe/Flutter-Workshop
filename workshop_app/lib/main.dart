@@ -37,9 +37,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Table(
           children: [
-            TableRow(children: [Text("Foobar")]),
-            TableRow(children: [Text("Boofar")]),
-            TableRow(children: [Text("Rafoob")])
+            TableRow(children: [Image.network('https://picsum.photos/250?image=1')]),
+            TableRow(children: [Image.network('https://picsum.photos/250?image=2')]),
+            TableRow(children: [Image.network('https://picsum.photos/250?image=3')])
           ],
         ));
   }
