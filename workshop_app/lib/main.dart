@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'api/api.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -35,6 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     rows = buildTableRows();
+    var apiData = Api().fetchShow('simpsons');
+    apiData.then((value) {
+      if (kDebugMode) {
+        print(value);
+      }
+    });
   }
 
   void onTapImage() {
