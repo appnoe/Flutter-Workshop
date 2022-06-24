@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'api/api.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -32,25 +30,33 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var rows = <TableRow>[];
+  late Future<String> _title;
 
   @override
   void initState() {
     super.initState();
+    _title = getValue();
+    // var apiData = Api().fetchShow('simpsons');
+    // apiData.then((value) {
     rows = buildTableRows();
-    var apiData = Api().fetchShow('simpsons');
-    apiData.then((value) {
-      if (kDebugMode) {
-        print(value);
-      }
-    });
+    // });
   }
 
   void onTapImage() {
     print("onTapImage");
   }
 
+  Future<String> getValue() async {
+    await Future.delayed(Duration(seconds: 3));
+    return 'Flutter Devs';
+  }
+
+  // List<TableRow> buildTableRows(List<Model.TVMazeSearchResult>? shows) {
   List<TableRow> buildTableRows() {
     var rows = <TableRow>[];
+    // shows?.forEach((element) {
+    //   print(element.show?.name);
+    // });
 
     for (var i = 0; i < 3; i++) {
       var row = TableRow(children: [
@@ -80,10 +86,18 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: SingleChildScrollView(
-          child: Table(
-            children: rows,
-          ),
+        body: FutureBuilder<String>(
+          future: _title,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Table(
+                  children: rows,
+                ),
+              );
+            }
+            return Center(child: const CircularProgressIndicator());
+          },
         ));
   }
 }
