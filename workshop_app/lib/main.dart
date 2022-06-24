@@ -29,6 +29,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var rows = <TableRow>[];
+
+  @override
+  void initState() {
+    super.initState();
+    rows = buildTableRows();
+  }
+
+  List<TableRow> buildTableRows() {
+    var rows = <TableRow>[];
+
+    for (var i = 0; i < 3; i++) {
+      var row = TableRow(children: [
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
+              child: Image.network('https://picsum.photos/250?image=${i}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
+              child: Text("Image ${i}"),
+            )
+          ],
+        )
+      ]);
+      rows.add(row);
+    }
+
+    return rows;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,50 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: SingleChildScrollView(
           child: Table(
-            children: [
-              TableRow(children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
-                      child: Image.network('https://picsum.photos/250?image=1'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
-                      child: Text("Image 1"),
-                    )
-                  ],
-                )
-              ]),
-              TableRow(children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
-                      child: Image.network('https://picsum.photos/250?image=2'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
-                      child: Text("Image 2"),
-                    )
-                  ],
-                )
-              ]),
-              TableRow(children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
-                      child: Image.network('https://picsum.photos/250?image=3'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
-                      child: Text("Image 3"),
-                    )
-                  ],
-                )
-              ])
-            ],
+            children: rows,
           ),
         ));
   }
