@@ -48,14 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _title = getValue();
+    _title = _getValue();
     _loadData(searchString);
   }
 
   void _loadData(String searchText) {
     var apiData = Api().fetchShow(searchText);
     apiData.then((value) {
-      this.setState(() {
+      setState(() {
         rows = buildTableRows(value);
       });
     });
@@ -65,8 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
     print("onTapImage: ${id}");
   }
 
-  Future<String> getValue() async {
-    await Future.delayed(Duration(seconds: 3));
+  Future<String> _getValue() async {
+    await Future.delayed(const Duration(seconds: 3));
     return 'placeholder';
   }
 
@@ -105,14 +105,14 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Suche nach Filmen'),
+            title: const Text('Suche nach Filmen'),
             content: TextField(
               onChanged: (value) {
                 setState(() {
                   searchString = value;
                 });
               },
-              decoration: InputDecoration(hintText: "Suchbegriff"),
+              decoration: const InputDecoration(hintText: "Suchbegriff"),
             ),
             actions: <Widget>[
               TextButton(
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               TextButton(
-                child: Text('Suchen'),
+                child: const Text('Suchen'),
                 onPressed: () {
                   setState(() {
                     _loadData(searchString);
@@ -146,8 +146,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               _displayTextInputDialog(context);
             },
-            child: Icon(
-              Icons.search, // add custom icons also
+            child: const Icon(
+              Icons.search,
             ),
           ),
         ),
@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             }
-            return Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ));
   }
