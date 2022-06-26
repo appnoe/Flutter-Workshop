@@ -5,6 +5,14 @@ import 'package:transparent_image/transparent_image.dart';
 import 'api/api.dart';
 import 'model/tvmazesearchresult.dart' as Model;
 
+/* TODO
+- Futurebuilder an API-Call koppeln
+- Show-Details auf Detailseite zeigen
+- Platform Channels
+- GridView
+- Login
+*/
+
 void main() {
   runApp(const MyApp());
 }
@@ -35,28 +43,34 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var rows = <TableRow>[];
   late Future<String> _title;
+  String searchString = 'simpsons';
 
   @override
   void initState() {
     super.initState();
     _title = getValue();
-    var apiData = Api().fetchShow('simpsons');
+    _loadData(searchString);
+  }
+
+  void _loadData(String searchText) {
+    var apiData = Api().fetchShow(searchText);
     apiData.then((value) {
-      rows = buildTableRows(value);
+      this.setState(() {
+        rows = buildTableRows(value);
+      });
     });
   }
 
-  void onTapImage() {
-    print("onTapImage");
+  void _onTapImage(int id) {
+    print("onTapImage: ${id}");
   }
 
   Future<String> getValue() async {
     await Future.delayed(Duration(seconds: 3));
-    return 'Flutter Devs';
+    return 'placeholder';
   }
 
   List<TableRow> buildTableRows(List<Model.TVMazeSearchResult>? shows) {
-    // List<TableRow> buildTableRows() {
     var rows = <TableRow>[];
     shows?.forEach((element) {
       var row = TableRow(children: [
@@ -69,7 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     placeholder: kTransparentImage,
                     image: element.show!.image!.medium!,
                   ),
-                  onTap: onTapImage),
+                  onTap: () {
+                    _onTapImage(element.show!.id!);
+                  }),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
@@ -81,9 +97,44 @@ class _MyHomePageState extends State<MyHomePage> {
       rows.add(row);
     });
 
-    for (var i = 0; i < 3; i++) {}
-
     return rows;
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Suche nach Filmen'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchString = value;
+                });
+              },
+              decoration: InputDecoration(hintText: "Suchbegriff"),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Abbrechen'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              TextButton(
+                child: Text('Suchen'),
+                onPressed: () {
+                  setState(() {
+                    _loadData(searchString);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -91,6 +142,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          leading: GestureDetector(
+            onTap: () {
+              _displayTextInputDialog(context);
+            },
+            child: Icon(
+              Icons.search, // add custom icons also
+            ),
+          ),
         ),
         body: FutureBuilder<String>(
           future: _title,
