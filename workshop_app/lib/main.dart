@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:workshop_app/view/show_details.dart';
@@ -72,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onTapImage(int id) {
-    print("onTapImage: $id");
+    if (kDebugMode) {
+      print("onTapImage: $id");
+    }
     var show = _showWithID(id);
     if (show != null) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -93,7 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
         Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
+              padding: const EdgeInsets.only(
+                  left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
               child: GestureDetector(
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
@@ -104,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   }),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
+              padding: const EdgeInsets.only(
+                  left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
               child: Text(element.show!.name!),
             )
           ],

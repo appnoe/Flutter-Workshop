@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -17,7 +17,9 @@ class _ShowDetailsState extends State<ShowDetails> {
   @override
   void initState() {
     super.initState();
-    print('Show: ${widget.show.name}');
+    if (kDebugMode) {
+      print('Show: ${widget.show.name}');
+    }
   }
 
   @override
