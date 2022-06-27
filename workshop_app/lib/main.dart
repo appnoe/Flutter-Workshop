@@ -7,7 +7,6 @@ import 'api/api.dart';
 import 'model/tvmazesearchresult.dart' as _model;
 
 /* TODO
-- Futurebuilder an API-Call koppeln
 - Platform Channels
 - GridView
 - Login
@@ -42,25 +41,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var rows = <TableRow>[];
-  late Future<String> _title;
   var apiData = <_model.TVMazeSearchResult>[];
   String searchString = 'simpsons';
 
   @override
   void initState() {
     super.initState();
-    _title = _getValue();
     _loadData(searchString);
   }
 
-  void _loadData(String searchText) {
+  Future<bool> _loadData(String searchText) async {
     var result = Api().fetchShow(searchText);
     result.then((value) {
       setState(() {
         apiData = value!;
         rows = buildTableRows(value);
       });
+      return true;
     });
+    return false;
   }
 
   _model.Show? _showWithID(int id) {
@@ -82,11 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
         return ShowDetails(show: show);
       }));
     }
-  }
-
-  Future<String> _getValue() async {
-    await Future.delayed(const Duration(seconds: 3));
-    return 'placeholder';
   }
 
   List<TableRow> buildTableRows(List<_model.TVMazeSearchResult>? shows) {
@@ -172,8 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-        body: FutureBuilder<String>(
-          future: _title,
+        body: FutureBuilder<bool>(
+          future: _loadData("simpsons"),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
