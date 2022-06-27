@@ -51,15 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<bool> _loadData(String searchText) async {
-    var result = Api().fetchShow(searchText);
-    result.then((value) {
-      setState(() {
-        apiData = value!;
-        rows = buildTableRows(value);
-      });
-      return true;
+    var result = await Api().fetchShow(searchText);
+    setState(() {
+      apiData = result!;
     });
-    return false;
+    return true;
   }
 
   _model.Show? _showWithID(int id) {
@@ -83,15 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  List<TableRow> buildTableRows(List<_model.TVMazeSearchResult>? shows) {
+  List<TableRow> _buildTableRows(List<_model.TVMazeSearchResult>? shows) {
     var rows = <TableRow>[];
     shows?.forEach((element) {
       var row = TableRow(children: [
         Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
+              padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
               child: GestureDetector(
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
@@ -102,8 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
+              padding: const EdgeInsets.only(left: 0.0, top: 8.0, right: 0.0, bottom: 12.0),
               child: Text(element.show!.name!),
             )
           ],
@@ -172,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Table(
-                  children: rows,
+                  children: _buildTableRows(apiData),
                 ),
               );
             }
