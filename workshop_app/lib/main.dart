@@ -4,6 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:workshop_app/view/show_details.dart';
 
 import 'api/api.dart';
+import 'crypto/cryptokit.dart';
 import 'model/tvmazesearchresult.dart' as _model;
 
 /* TODO
@@ -40,13 +41,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var rows = <TableRow>[];
+  static String hash = "";
+  static CryptoKit cryptoKit = CryptoKit();
   var apiData = <_model.TVMazeSearchResult>[];
   String searchString = 'simpsons';
 
   @override
   void initState() {
     super.initState();
+    cryptoKit.getHash("foobar");
     _loadData(searchString);
   }
 
