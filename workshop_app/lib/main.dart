@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:workshop_app/view/show_details.dart';
 
 import 'api/api.dart';
-import 'model/tvmazesearchresult.dart' as Model;
+import 'model/tvmazesearchresult.dart' as _model;
 
 /* TODO
 - Futurebuilder an API-Call koppeln
-- Show-Details auf Detailseite zeigen
 - Platform Channels
 - GridView
 - Login
@@ -43,6 +42,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var rows = <TableRow>[];
   late Future<String> _title;
+  var apiData = <_model.TVMazeSearchResult>[];
   String searchString = 'simpsons';
 
   @override
@@ -53,16 +53,32 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _loadData(String searchText) {
-    var apiData = Api().fetchShow(searchText);
-    apiData.then((value) {
+    var result = Api().fetchShow(searchText);
+    result.then((value) {
       setState(() {
+        apiData = value!;
         rows = buildTableRows(value);
       });
     });
   }
 
+  _model.Show? _showWithID(int id) {
+    for (var i = 0; i < apiData.length; i++) {
+      if (apiData[i].show?.id == id) {
+        return apiData[i].show;
+      }
+    }
+    return null;
+  }
+
   void _onTapImage(int id) {
-    print("onTapImage: ${id}");
+    print("onTapImage: $id");
+    var show = _showWithID(id);
+    if (show != null) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ShowDetails(show: show);
+      }));
+    }
   }
 
   Future<String> _getValue() async {
@@ -70,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return 'placeholder';
   }
 
-  List<TableRow> buildTableRows(List<Model.TVMazeSearchResult>? shows) {
+  List<TableRow> buildTableRows(List<_model.TVMazeSearchResult>? shows) {
     var rows = <TableRow>[];
     shows?.forEach((element) {
       var row = TableRow(children: [
@@ -116,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             actions: <Widget>[
               TextButton(
-                child: Text('Abbrechen'),
+                child: const Text('Abbrechen'),
                 onPressed: () {
                   setState(() {
                     Navigator.pop(context);
