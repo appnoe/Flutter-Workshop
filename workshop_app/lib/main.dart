@@ -8,7 +8,6 @@ import 'crypto/cryptokit.dart';
 import 'model/tvmazesearchresult.dart' as _model;
 
 /* TODO
-- Platform Channels
 - GridView
 - Login
 */
