@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:workshop_app/dependencies.dart';
 
 import 'common/api/api.dart';
 import 'features/movie_list/presentation/pages/show_list.dart';
@@ -9,7 +10,9 @@ import 'features/movie_list/presentation/pages/show_list.dart';
 - Logout
 */
 
-void main() {
+void main() async {
+  await initializeIoC();
+
   runApp(const WorkshopApp());
 }
 

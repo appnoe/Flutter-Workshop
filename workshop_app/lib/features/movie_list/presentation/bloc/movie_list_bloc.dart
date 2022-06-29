@@ -7,9 +7,9 @@ part 'movie_list_event.dart';
 part 'movie_list_state.dart';
 
 class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
-  final GetMovieList _getMovieList;
+  final GetMovieList getMovieList;
 
-  MovieListBloc(this._getMovieList) : super(MovieListInitial()) {
+  MovieListBloc({required this.getMovieList}) : super(MovieListInitial()) {
     on<MovieListEvent>(
       (event, emit) async {
         print(event);
@@ -17,7 +17,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
 
         if (event is MovieListRequested) {
           try {
-            final result = await _getMovieList.fetchData(event.searchText);
+            final result = await getMovieList.fetchData(event.searchText);
 
             if (result != null) {
               if (result.isEmpty) {

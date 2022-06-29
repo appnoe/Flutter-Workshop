@@ -4,7 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:workshop_app/common/styles.dart';
 import 'package:workshop_app/features/movie_list/usecase/get_movie_list.dart';
 
-import '../../../../common/api/api.dart';
+import '../../../../dependencies.dart';
 import '../../../movie_details/presentation/page/show_details.dart';
 import '../../../../crypto/cryptokit.dart';
 import '../../../../model/tvmazesearchresult.dart' as _model;
@@ -16,7 +16,7 @@ class ShowListWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MovieListBloc(GetMovieList(Api())),
+      create: (context) => MovieListBloc(getMovieList: get<GetMovieList>()),
       child: const ShowList(title: 'App zum Workshop'),
     );
   }
