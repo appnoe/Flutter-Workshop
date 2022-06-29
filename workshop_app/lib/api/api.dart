@@ -14,8 +14,8 @@ class Api {
     final uri = Uri.parse('$baseURL + $name');
     final response = await get(uri).timeout(const Duration(seconds: 10));
     if (response.statusCode == 200) {
-      List<TVMazeSearchResult> resultList = TVMazeSearchResult.fromJsonArray(response.body);
-      return resultList;
+      //List<TVMazeSearchResult> resultList = TVMazeSearchResult.fromJsonArray(response.body);
+      return null;
     } else {
       return null;
     }
