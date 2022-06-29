@@ -1,13 +1,23 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import '../model/show_model.dart';
 import './show_details.dart';
 import '../crypto/cryptokit.dart';
 import '../model/tvmazesearchresult.dart' as _model;
 import 'bloc/movie_list_bloc.dart';
+
+class ShowListWrapper extends StatelessWidget {
+  const ShowListWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => MovieListBloc()..add(MovieListRequested('simpsons')),
+      child: const ShowList(title: 'App zum Workshop'),
+    );
+  }
+}
 
 class ShowList extends StatefulWidget {
   const ShowList({Key? key, required this.title}) : super(key: key);
@@ -123,29 +133,21 @@ class _ShowListState extends State<ShowList> {
           ),
         ),
       ),
-      body: BlocProvider(
-        create: (context) =>
-            MovieListBloc()..add(MovieListRequested('simpsons')),
-        child: Builder(
-          builder: (context) {
-            return BlocBuilder<MovieListBloc, MovieListState>(
-              builder: (context, state) {
-                return AnimatedSwitcher(
-                  duration: Duration(seconds: 3),
-                  child: (state is MovieListRequested)
-                      ? const Center(child: CircularProgressIndicator())
-                      : (state is MovieListLoadingSucceded)
-                          ? SingleChildScrollView(
-                              child: Table(
-                                children: _buildTableRows(state.movieList),
-                              ),
-                            )
-                          : Container(),
-                );
-              },
-            );
-          },
-        ),
+      body: BlocBuilder<MovieListBloc, MovieListState>(
+        builder: (context, state) {
+          return AnimatedSwitcher(
+            duration: Duration(seconds: 6),
+            child: (state is MovieListRequested)
+                ? const Center(child: CircularProgressIndicator())
+                : (state is MovieListLoadingSucceded)
+                    ? SingleChildScrollView(
+                        child: Table(
+                          children: _buildTableRows(state.movieList),
+                        ),
+                      )
+                    : Container(),
+          );
+        },
       ),
     );
   }

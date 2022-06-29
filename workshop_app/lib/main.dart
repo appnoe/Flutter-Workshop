@@ -24,7 +24,7 @@ class WorkshopApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ShowList(title: 'App zum Workshop',),
+      home: const ShowListWrapper(),
     );
   }
 }
