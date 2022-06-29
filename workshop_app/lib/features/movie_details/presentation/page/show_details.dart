@@ -6,6 +6,8 @@ import 'package:transparent_image/transparent_image.dart';
 import '../../../../model/show_model.dart';
 
 class ShowDetails extends StatefulWidget {
+  static const descriptionKey = Key('ShowDetails.descriptionKey');
+
   final Show show;
   const ShowDetails({Key? key, required this.show}) : super(key: key);
 
@@ -31,6 +33,7 @@ class _ShowDetailsState extends State<ShowDetails> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            if (widget.show.image != null)
             Hero(
               tag: widget.show.id!,
               child: FadeInImage.memoryNetwork(
@@ -38,7 +41,10 @@ class _ShowDetailsState extends State<ShowDetails> {
                 image: widget.show.image!.original!,
               ),
             ),
-            Html(data: widget.show.summary!)
+            Html(
+              key: ShowDetails.descriptionKey,
+              data: widget.show.summary!,
+            )
           ],
         ),
       ),
