@@ -5,7 +5,6 @@ import 'package:transparent_image/transparent_image.dart';
 
 import '../model/show_model.dart';
 import './show_details.dart';
-import '../api/api.dart';
 import '../crypto/cryptokit.dart';
 import '../model/tvmazesearchresult.dart' as _model;
 import 'bloc/movie_list_bloc.dart';
@@ -27,36 +26,7 @@ class _ShowListState extends State<ShowList> {
   void initState() {
     super.initState();
     cryptoKit.getHash("foobar");
-    _loadData(searchString);
-  }
-
-  Future<bool> _loadData(String searchText) async {
-    var result = await Api().fetchShow(searchText);
-    setState(() {
-      apiData = result!;
-    });
-    return true;
-  }
-
-  Show? _showWithID(int id) {
-    for (var i = 0; i < apiData.length; i++) {
-      if (apiData[i].show?.id == id) {
-        return apiData[i].show;
-      }
-    }
-    return null;
-  }
-
-  void _onTapImage(int id) {
-    if (kDebugMode) {
-      print("onTapImage: $id");
-    }
-    var show = _showWithID(id);
-    if (show != null) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return ShowDetails(show: show);
-      }));
-    }
+    // _loadData(searchString);
   }
 
   List<TableRow> _buildTableRows(List<_model.TVMazeSearchResult>? shows) {
@@ -69,12 +39,23 @@ class _ShowListState extends State<ShowList> {
               padding: const EdgeInsets.only(
                   left: 0.0, top: 12.0, right: 0.0, bottom: 0.0),
               child: GestureDetector(
-                  child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: element.show!.image!.medium!,
+                  child: Hero(
+                    tag: element.show!.id!,
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: element.show!.image!.medium!,
+                    ),
                   ),
                   onTap: () {
-                    _onTapImage(element.show!.id!);
+                    if (element.show != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ShowDetails(show: element.show!),
+                        ),
+                      );
+                    }
                   }),
             ),
             Padding(
@@ -118,7 +99,7 @@ class _ShowListState extends State<ShowList> {
                 child: const Text('Suchen'),
                 onPressed: () {
                   setState(() {
-                    _loadData(searchString);
+                    // _loadData(searchString);
                     Navigator.pop(context);
                   });
                 },
@@ -131,40 +112,42 @@ class _ShowListState extends State<ShowList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          leading: GestureDetector(
-            onTap: () {
-              _displayTextInputDialog(context);
-            },
-            child: const Icon(
-              Icons.search,
-            ),
+      appBar: AppBar(
+        title: Text(widget.title),
+        leading: GestureDetector(
+          onTap: () {
+            _displayTextInputDialog(context);
+          },
+          child: const Icon(
+            Icons.search,
           ),
         ),
-        body: BlocProvider(
-          create: (context) => MovieListBloc()..add(MovieListRequested()),
-          child: Builder(builder: (context) {
-            BlocListener<MovieListBloc, MovieListState>(listener: (context, state) {
-
-            },);
-
-
-            return BlocBuilder<MovieListBloc, MovieListState>(builder: (context, state) {
-              if (state is MovieListRequested) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state is MovieListLoadingSucceded) {
-                return SingleChildScrollView(
-                    child: Table(
-                      children: _buildTableRows(apiData),
-                    ),
-                  );
-              }
-              return Container();
-            });
-          }),
-        ));
+      ),
+      body: BlocProvider(
+        create: (context) =>
+            MovieListBloc()..add(MovieListRequested('simpsons')),
+        child: Builder(
+          builder: (context) {
+            return BlocBuilder<MovieListBloc, MovieListState>(
+              builder: (context, state) {
+                return AnimatedSwitcher(
+                  duration: Duration(seconds: 3),
+                  child: (state is MovieListRequested)
+                      ? const Center(child: CircularProgressIndicator())
+                      : (state is MovieListLoadingSucceded)
+                          ? SingleChildScrollView(
+                              child: Table(
+                                children: _buildTableRows(state.movieList),
+                              ),
+                            )
+                          : Container(),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
@@ -173,36 +156,35 @@ class _ShowListState extends State<ShowList> {
 // Error State
 // no found state
 
-class MyFooContainerWidget extends StatelessWidget {
-  const MyFooContainerWidget({Key? key}) : super(key: key);
+// class MyFooContainerWidget extends StatelessWidget {
+//   const MyFooContainerWidget({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MovieListBloc(),
-      child: const MyFooWidget(),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocProvider(
+//       create: (context) => MovieListBloc(),
+//       child: const MyFooWidget(),
+//     );
+//   }
+// }
 
-class MyFooWidget extends StatefulWidget {
-  const MyFooWidget({Key? key}) : super(key: key);
+// class MyFooWidget extends StatefulWidget {
+//   const MyFooWidget({Key? key}) : super(key: key);
 
-  @override
-  State<MyFooWidget> createState() => _MyFooWidgetState();
-}
+//   @override
+//   State<MyFooWidget> createState() => _MyFooWidgetState();
+// }
 
-class _MyFooWidgetState extends State<MyFooWidget> {
+// class _MyFooWidgetState extends State<MyFooWidget> {
+//   @override
+//   void initState() {
+//     context.read<MovieListBloc>().add(MovieListRequested());
+//     final myList = context.watch<MovieListBloc>().state;
+//     super.initState();
+//   }
 
-  @override
-  void initState() {
-    context.read<MovieListBloc>().add(MovieListRequested());
-    final myList = context.watch<MovieListBloc>().state;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }

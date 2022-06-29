@@ -24,7 +24,7 @@ class WorkshopApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginWidget(),
+      home: const ShowList(title: 'App zum Workshop',),
     );
   }
 }
@@ -37,6 +37,8 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
+
+  
   //region Login
   Future<String?> _validateUser(LoginData data) async {
     var result = await Api().validateUser(data);

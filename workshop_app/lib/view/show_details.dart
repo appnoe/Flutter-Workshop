@@ -31,9 +31,12 @@ class _ShowDetailsState extends State<ShowDetails> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: widget.show.image!.original!,
+            Hero(
+              tag: widget.show.id!,
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: widget.show.image!.original!,
+              ),
             ),
             Html(data: widget.show.summary!)
           ],

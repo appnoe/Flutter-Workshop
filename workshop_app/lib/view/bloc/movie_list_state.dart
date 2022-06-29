@@ -8,7 +8,7 @@ class MovieListLoadingStarted extends MovieListState {}
 
 class MovieListLoadingFailed extends MovieListState {}
 class MovieListLoadingSucceded extends MovieListState {
-  final TVMazeSearchResult movieList;
+  final List<TVMazeSearchResult> movieList;
 
   MovieListLoadingSucceded({required this.movieList});
 }
