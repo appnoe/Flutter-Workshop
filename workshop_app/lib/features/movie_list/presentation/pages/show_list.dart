@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:workshop_app/common/styles.dart';
+import 'package:workshop_app/features/movie_list/usecase/get_movie_list.dart';
 
-import './show_details.dart';
-import '../crypto/cryptokit.dart';
-import '../model/tvmazesearchresult.dart' as _model;
-import 'bloc/movie_list_bloc.dart';
+import '../../../../common/api/api.dart';
+import '../../../movie_details/presentation/page/show_details.dart';
+import '../../../../crypto/cryptokit.dart';
+import '../../../../model/tvmazesearchresult.dart' as _model;
+import '../bloc/movie_list_bloc.dart';
 
 class ShowListWrapper extends StatelessWidget {
   const ShowListWrapper({Key? key}) : super(key: key);
@@ -13,7 +16,7 @@ class ShowListWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MovieListBloc()..add(MovieListRequested('simpsons')),
+      create: (context) => MovieListBloc(GetMovieList(Api())),
       child: const ShowList(title: 'App zum Workshop'),
     );
   }
@@ -82,39 +85,42 @@ class _ShowListState extends State<ShowList> {
     return rows;
   }
 
-  Future<void> _displayTextInputDialog(BuildContext context) async {
+  Future _displayTextInputDialog() async {
     return showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Suche nach Filmen'),
-            content: TextField(
-              onChanged: (value) {
-                setState(() {
+        builder: (_) {
+          return BlocProvider<MovieListBloc>.value(
+            value: BlocProvider.of<MovieListBloc>(context),
+            child: AlertDialog(
+              title: const Text('Suche nach Filmen'),
+              content: TextField(
+                onChanged: (value) {
                   searchString = value;
-                });
-              },
-              decoration: const InputDecoration(hintText: "Suchbegriff"),
+                },
+                decoration: const InputDecoration(hintText: "Suchbegriff"),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Abbrechen'),
+                  onPressed: () {
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                TextButton(
+                  child: const Text('Suchen', style: PSTextStyles.blackRegular14,),
+                  onPressed: () {
+                    setState(() {
+                      context
+                        .read<MovieListBloc>()
+                        .add(MovieListRequested(searchString));
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
             ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Abbrechen'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              TextButton(
-                child: const Text('Suchen'),
-                onPressed: () {
-                  setState(() {
-                    // _loadData(searchString);
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ],
           );
         });
   }
@@ -126,7 +132,7 @@ class _ShowListState extends State<ShowList> {
         title: Text(widget.title),
         leading: GestureDetector(
           onTap: () {
-            _displayTextInputDialog(context);
+            _displayTextInputDialog();
           },
           child: const Icon(
             Icons.search,

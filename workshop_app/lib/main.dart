@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
 
-import 'api/api.dart';
-import 'view/show_list.dart';
+import 'common/api/api.dart';
+import 'features/movie_list/presentation/pages/show_list.dart';
 
 /* TODO
 - GridView
@@ -75,7 +74,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
         ));
       },
-      onRecoverPassword: (String) {},
+      onRecoverPassword: (_) {},
     )));
   }
 }

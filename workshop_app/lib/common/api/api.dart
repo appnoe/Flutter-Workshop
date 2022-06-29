@@ -1,27 +1,23 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_login/flutter_login.dart';
 import 'package:http/http.dart';
 
-import '../model/tvmazesearchresult.dart';
 
 class Api {
   String baseURL = 'https://api.tvmaze.com/search/shows?q=';
 
-  Future<List<TVMazeSearchResult>?> fetchShow(String name) async {
+  Future<String> fetchShow(String name) async {
     // await Future.delayed(const Duration(seconds: 2));
 
     final uri = Uri.parse('$baseURL + $name');
     final response = await get(uri).timeout(const Duration(seconds: 10));
-    if (response.statusCode == 200) {
-      final jsonBody = json.decode(response.body) as List;
-      
-      List<TVMazeSearchResult> resultList = List.from(jsonBody.map((element) => TVMazeSearchResult.fromJson(element)));
 
-      return resultList;
+    if (response.statusCode != 200) {
+      throw 'Something went wrong';
     } else {
-      return null;
+
+      return response.body;
     }
   }
 

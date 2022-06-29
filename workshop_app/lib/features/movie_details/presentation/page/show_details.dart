@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import '../model/show_model.dart';
+import '../../../../model/show_model.dart';
 
 class ShowDetails extends StatefulWidget {
   final Show show;
