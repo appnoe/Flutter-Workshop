@@ -12,7 +12,6 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
   MovieListBloc({required this.getMovieList}) : super(MovieListInitial()) {
     on<MovieListEvent>(
       (event, emit) async {
-        print(event);
         emit(MovieListLoadingStarted());
 
         if (event is MovieListRequested) {

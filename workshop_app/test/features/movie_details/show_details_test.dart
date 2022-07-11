@@ -30,6 +30,7 @@ void main() {
   });
 
   setUpAll(() {
+    // widgetTester.binding.window.physicalSizeTestValue = Size(500, 1980);
     // vor jedem test
   });
 
@@ -38,7 +39,6 @@ void main() {
       home: sut,
     ));
     await widgetTester.pumpAndSettle();
-
     final text = find.byKey(ShowDetails.descriptionKey);
 
     await widgetTester.scrollUntilVisible(text, 55.8);
@@ -53,12 +53,4 @@ void main() {
     verify(() => sut.createElement());
     expect(element, element);
   });
-
-  blocTest<MovieListBloc, MovieListState>(
-    'emits [MyState] when MyEvent is added.',
-    build: () => MovieListBloc(getMovieList: mockGetMovieList),
-    act: (bloc) => bloc.add(MovieListRequested('test')),
-    expect: () => const <MovieListState>[MyState],
-    verify: (_) => [mockGetMovieList.fetchData('simpsons')]
-  );
 }
